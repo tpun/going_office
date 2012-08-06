@@ -22,6 +22,7 @@ Q = file.readline.to_i
   v = cities[v.to_i]
 
   original = u.distance v
+  puts "Disconnecting #{u.name} and #{v.name} original: #{original}"
   u.disconnect v
 
   puts S.distance D

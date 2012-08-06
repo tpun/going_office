@@ -25,6 +25,18 @@ describe City do
     end
   end
 
+  describe '#disconnect' do
+    let(:city2) { City.new 'city2' }
+    let(:distance) { 10 }
+    before { subject.connect city2, distance }
+
+    it 'disconnects two cities' do
+      subject.disconnect city2
+
+      subject.distance(city2).should == Float::INFINITY
+    end
+  end
+
   describe '#distance' do
     let(:city1) { City.new 'city1' }
     let(:city2) { City.new 'city2' }
