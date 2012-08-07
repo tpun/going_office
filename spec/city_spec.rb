@@ -37,6 +37,27 @@ describe City do
     end
   end
 
+  describe '#non_direct_connections' do
+    let(:city1) { City.new 'city1' }
+    let(:city2) { City.new 'city2' }
+    let(:city3) { City.new 'city3' }
+    let(:city4) { City.new 'city4' }
+    let(:city5) { City.new 'city5' }
+
+    before do
+      city1.connect city2, 1
+      city1.connect city3, 1
+      city2.connect city3, 1
+      city2.connect city5, 1
+      city3.connect city4, 1
+    end
+
+    it 'returns possible non direct connections to destination city' do
+      visited = Set.new [city1]
+      city2.non_direct_connections(city4, visited).should == [city3, city5]
+    end
+  end
+
   describe '#distance' do
     let(:city1) { City.new 'city1' }
     let(:city2) { City.new 'city2' }
