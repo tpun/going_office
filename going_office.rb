@@ -1,8 +1,10 @@
 require 'pry'
 require_relative 'city'
 
-input = ARGV.shift
+input = ARGV.shift || 'input00.txt'
+output= ARGV.shift || 'output00.txt'
 file = File.new input
+truth= File.new output
 
 n, m = file.readline.split ' '
 N, M = n.to_i, m.to_i
@@ -16,17 +18,24 @@ s,d = file.readline.split ' '
 S, D = cities[s.to_i], cities[d.to_i]
 
 Q = file.readline.to_i
-1.times do
+Q.times do
   u, v = file.readline.split ' '
   u = cities[u.to_i]
   v = cities[v.to_i]
 
   original = u.distance v
-  puts "Disconnecting #{u.name} and #{v.name} original: #{original}"
+  # puts "Disconnecting #{u.name} and #{v.name} original: #{original}"
   u.disconnect v
 
-  puts S.distance D
-
+  shortest = S.distance D
+  print "#{shortest}"
+  if truth
+    ground_truth = truth.readline.to_i
+    print " *** Failed! Correct answer: #{ground_truth}" if shortest!=ground_truth
+    puts
+  end
   u.connect v, original
 end
+
 file.close
+truth.close if truth
