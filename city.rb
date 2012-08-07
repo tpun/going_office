@@ -22,20 +22,17 @@ class City
   end
 
   def distance city, visited=Set.new
-    puts "#{self.name} -> #{city.name}" if debug?
-    if @distances.empty? || (visited.include? self)
-      puts "  end: #{@distances[city] || Float::INFINITY}" if debug?
-      return @distances[city] || Float::INFINITY
-    end
+    return 0 if city == self
+    return Float::INFINITY if visited.include? self
 
     visited << self
-    direct_distance = @distances[city] || Float::INFINITY
+    direct_distance   = @distances[city] || Float::INFINITY
     childen_distances = @distances.keys.
-                          select {|c| c!= city }.
-                          map    {|c| distance(c, visited) +
-                                      c.distance(city, visited) }
+                          select { |c| c != city && (!visited.include? c) }.
+                          map    { |c|  @distances[c] +
+                                       c.distance(city, visited.clone) }
+    puts "#{self.name} -> #{city.name}: direct: #{direct_distance} childen_distances: #{childen_distances.inspect}" if debug?
 
-    puts "#{self.name} -> #{city.name}: #{[direct_distance, *childen_distances].min} | direct: #{direct_distance}  childen: #{childen_distances}"  if debug?
     [direct_distance, *childen_distances].min
   end
 

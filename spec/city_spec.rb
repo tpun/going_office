@@ -65,12 +65,25 @@ describe City do
       city2.distance(city4).should == 23 + 34
     end
 
-    it 'finds the shortest distance' do
+    it 'outputs the shortest distance' do
       city1.connect city2, 12
       city2.connect city3, 23
       city1.connect city3, 100
 
       city1.distance(city3).should == 12 + 23
+    end
+
+    it 'finds the shortest in a star pattern' do
+      cities = [city1, city2, city3, city4, city5]
+      cities.each do | s |
+        cities.each do | d |
+          s.connect d, 1 if s != d
+        end
+      end
+      city1.disconnect city3 # no direct path
+      city6.connect city3, 1
+
+      city1.distance(city6).should == 3
     end
   end
 end
